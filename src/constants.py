@@ -1,0 +1,7 @@
+import arcade
+
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+SCREEN_TITLE = "PyThopoly"
+FULLSCREEN = True
+BACKGROUND_COLOR = arcade.color.AMAZON
