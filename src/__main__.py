@@ -1,5 +1,6 @@
 import arcade
 from src import constants
+from src.entity import board
 
 
 class PyThopoly(arcade.Window):
@@ -12,15 +13,19 @@ class PyThopoly(arcade.Window):
 
         arcade.set_background_color(constants.BACKGROUND_COLOR)
 
+        self.board = None
+
+
     def setup(self):
-        """ Set up the game variables. Call to re-start the game. """
-        pass
+        tiles = [board.BoardTile(75, arcade.color.CARDINAL, "Test") for _ in range(40)]
+        self.board = board.Board(self.width / 2, self.height / 2, tiles)
 
     def on_draw(self):
         """
         Render the screen.
         """
         self.clear()
+        self.board.draw()
 
     def on_update(self, delta_time):
         """
@@ -43,10 +48,7 @@ class PyThopoly(arcade.Window):
         pass
 
     def on_mouse_motion(self, x, y, delta_x, delta_y):
-        """
-        Called whenever the mouse moves.
-        """
-        pass
+        """ User moves mouse """
 
     def on_mouse_press(self, x, y, button, key_modifiers):
         """
