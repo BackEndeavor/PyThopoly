@@ -17,17 +17,12 @@ class PyThopoly(arcade.Window):
 
         self.board = None
         self.player = None
-        self.first_dice = None
-        self.second_dice = None
+        self.dice = None
 
     def setup(self):
         self.board = board.Board("../assets/tilemaps/monopoly.json", self.width, self.height)
         self.player = Player(board=self.board, radius=20)
-        center = self.board.center()
-        center[0] -= 50
-        self.first_dice = dice.Dice("../assets/images/dices/", center)
-        center[0] += 100
-        self.second_dice = dice.Dice("../assets/images/dices/", center)
+        self.dice = dice.Dice("../assets/images/dices/", center)
 
     def on_draw(self):
         """
