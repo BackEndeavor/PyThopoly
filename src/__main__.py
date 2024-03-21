@@ -1,6 +1,8 @@
 import arcade
+
 from src import constants
-from src.entity import board
+from src.entity import board, dice
+from src.entity.player import Player
 
 
 class PyThopoly(arcade.Window):
@@ -14,11 +16,18 @@ class PyThopoly(arcade.Window):
         arcade.set_background_color(constants.BACKGROUND_COLOR)
 
         self.board = None
-
+        self.player = None
+        self.first_dice = None
+        self.second_dice = None
 
     def setup(self):
-        tiles = [board.BoardTile(75, arcade.color.CARDINAL, "Test") for _ in range(40)]
-        self.board = board.Board(self.width / 2, self.height / 2, tiles)
+        self.board = board.Board("../assets/tilemaps/monopoly.json", self.width, self.height)
+        self.player = Player(board=self.board, radius=20)
+        center = self.board.center()
+        center[0] -= 50
+        self.first_dice = dice.Dice("../assets/images/dices/", center)
+        center[0] += 100
+        self.second_dice = dice.Dice("../assets/images/dices/", center)
 
     def on_draw(self):
         """
@@ -26,6 +35,8 @@ class PyThopoly(arcade.Window):
         """
         self.clear()
         self.board.draw()
+        self.player.draw()
+        self.dice.draw()
 
     def on_update(self, delta_time):
         """
@@ -36,29 +47,14 @@ class PyThopoly(arcade.Window):
         pass
 
     def on_key_press(self, key, key_modifiers):
-        """
-        Called whenever a key on the keyboard is pressed.
-        """
-        pass
+        if key == arcade.key.D:
+            self.player.position_index += 1
+        if key == arcade.key.R:
+            self.dice.select_random_dice()
 
     def on_key_release(self, key, key_modifiers):
         """
         Called whenever the user lets off a previously pressed key.
-        """
-        pass
-
-    def on_mouse_motion(self, x, y, delta_x, delta_y):
-        """ User moves mouse """
-
-    def on_mouse_press(self, x, y, button, key_modifiers):
-        """
-        Called when the user presses a mouse button.
-        """
-        pass
-
-    def on_mouse_release(self, x, y, button, key_modifiers):
-        """
-        Called when a user releases a mouse button.
         """
         pass
 
