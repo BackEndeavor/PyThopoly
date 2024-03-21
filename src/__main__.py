@@ -43,7 +43,7 @@ class PyThopoly(arcade.Window):
 
     def on_key_press(self, key, key_modifiers):
         if key == arcade.key.D:
-            self.player.position_index += 1
+            self.player.next_step(1)
         if key == arcade.key.R:
             self.dice.select_random_dice()
 
