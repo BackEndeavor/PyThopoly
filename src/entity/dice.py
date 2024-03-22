@@ -26,6 +26,7 @@ class Dice:
             arcade.Sprite(animated_dices_path + "third.png"),
             arcade.Sprite(animated_dices_path + "second.png")
         ]
+        random.shuffle(self.animated_dices)
         for animated_dice in self.animated_dices:
             animated_dice.center_x = position[0]
             animated_dice.center_y = position[1]
