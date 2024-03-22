@@ -6,3 +6,5 @@ SCREEN_TITLE = "PyThopoly"
 FULLSCREEN = True
 BACKGROUND_COLOR = arcade.color.CELADON_GREEN
 DICE_SCALE = 4
+
+PLAYER_PATH_CLASS = 'player_path'

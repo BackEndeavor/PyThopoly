@@ -5,6 +5,8 @@ import pyglet
 from pytiled_parser import ObjectLayer
 from pytiled_parser.tiled_object import Point
 
+from src.constants import PLAYER_PATH_CLASS
+
 
 class Board:
     def __init__(self, tilemap_path, width, height):
@@ -19,9 +21,10 @@ class Board:
         alignments = cast(ObjectLayer, self.map.get_tilemap_layer('Alignments'))
         self.positions = {}
         for tiled_object in alignments.tiled_objects:
-            if isinstance(tiled_object, Point):
-                self.positions[int(tiled_object.name)] = tiled_object.coordinates.x, board_map_pixel_size[
-                                                                                         1] - tiled_object.coordinates.y - 1
+            if isinstance(tiled_object, Point) and tiled_object.class_ == PLAYER_PATH_CLASS:
+                x, y = tiled_object.coordinates
+                # We are converting from top left coordinate orientation to the bottom left
+                self.positions[int(tiled_object.name)] = (x, board_map_pixel_size[1] - y - 1)
 
     def draw(self):
         self.scene.draw()
