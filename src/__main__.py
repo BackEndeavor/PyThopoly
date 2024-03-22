@@ -40,6 +40,7 @@ class PyThopoly(arcade.Window):
     def on_update(self, delta_time):
         self.first_dice.update(delta_time)
         self.second_dice.update(delta_time)
+        self.player.update()
 
     def on_key_press(self, key, key_modifiers):
         if key == arcade.key.D:

@@ -1,18 +1,37 @@
 import arcade
 
-from src.constants import PLAYER_PATH_CLASS
+from src.animation.transition import MoveTransition
+from src.constants import PLAYER_PATH_CLASS, MOVE_TRANSITION_SPEED
 
 
-class Player:
+class Player(MoveTransition):
     def __init__(self, board, radius, position_index=0, money=0):
+        super().__init__(MOVE_TRANSITION_SPEED)
         self.board = board
         self.radius = radius
         self.money = money
         self.position_index = position_index
 
-    def draw(self):
         x, y = self.board.index_to_position(self.position_index)
-        arcade.draw_circle_filled(x, y, self.radius, arcade.color.GOLD)
+        self.current_x = x
+        self.current_y = y
+        self._set_start_position(x, y)
+
+    def draw(self):
+        arcade.draw_circle_filled(self.current_x, self.current_y, self.radius, arcade.color.GOLD)
+
+    def update(self):
+        self.update_animation()
+
+        x, y = self.board.index_to_position(self.position_index)
+
+        if self.current_x == x and self.current_y == y:
+            return
+
+        if self.is_animating():
+            return
+
+        self.move(x, y)
 
     def next_step(self, amount):
         new_position = self.position_index + amount
@@ -20,3 +39,12 @@ class Player:
             self.position_index = new_position % len(self.board.positions[PLAYER_PATH_CLASS])
             return
         self.position_index += amount
+
+    def current_position(self) -> (float, float):
+        return self.current_x, self.current_y
+
+    def update_position(self, x, y):
+        self.current_x = x
+        self.current_y = y
+
+

@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 
 import arcade
 
-from src.constants import DICE_SCALE, UPDATES_PER_FRAME
+from src.constants import UPDATES_PER_FRAME
 
 
 class Dice:
@@ -26,6 +26,7 @@ class Dice:
             arcade.Sprite(animated_dices_path + "third.png"),
             arcade.Sprite(animated_dices_path + "second.png")
         ]
+        random.shuffle(self.animated_dices)
         for animated_dice in self.animated_dices:
             animated_dice.center_x = position[0]
             animated_dice.center_y = position[1]
@@ -63,7 +64,7 @@ class Dice:
 
     @staticmethod
     def _create_dice(path, position):
-        dice = arcade.Sprite(path, DICE_SCALE)
+        dice = arcade.Sprite(path)
         dice.center_x = position[0]
         dice.center_y = position[1]
         return dice
