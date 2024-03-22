@@ -22,7 +22,7 @@ class PyThopoly(arcade.Window):
     def setup(self):
         self.board = board.Board("../assets/tilemaps/monopoly.json", self.width, self.height)
         self.player = Player(board=self.board, radius=20)
-        self.dice = dice.Dice("../assets/images/dices/", self.board.center())
+        self.dice = dice.Dice("../assets/images/dices/","../assets/images/animated_dices/", self.board.center())
 
     def on_draw(self):
         """
@@ -34,12 +34,7 @@ class PyThopoly(arcade.Window):
         self.dice.draw()
 
     def on_update(self, delta_time):
-        """
-        All the logic to move, and the game logic goes here.
-        Normally, you'll call update() on the sprite lists that
-        need it.
-        """
-        pass
+        self.dice.update(delta_time)
 
     def on_key_press(self, key, key_modifiers):
         if key == arcade.key.D:
