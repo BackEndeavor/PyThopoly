@@ -22,7 +22,7 @@ class PyThopoly(arcade.Window):
     def setup(self):
         self.board = board.Board("../assets/tilemaps/monopoly.json", self.width, self.height)
         self.player = Player(board=self.board, radius=20)
-        self.dice = dice.Dice("../assets/images/dices/", center)
+        self.dice = dice.Dice("../assets/images/dices/", self.board.center())
 
     def on_draw(self):
         """

@@ -20,7 +20,8 @@ class Board:
         self.positions = {}
         for tiled_object in alignments.tiled_objects:
             if isinstance(tiled_object, Point):
-                self.positions[int(tiled_object.name)] = tiled_object.coordinates.x, board_map_pixel_size[1] - tiled_object.coordinates.y - 1
+                self.positions[int(tiled_object.name)] = tiled_object.coordinates.x, board_map_pixel_size[
+                                                                                         1] - tiled_object.coordinates.y - 1
 
     def draw(self):
         self.scene.draw()
@@ -29,3 +30,8 @@ class Board:
         tile_offset_x, tile_offset_y = self.positions[index]
         return self.offset.x + tile_offset_x, self.offset.y + tile_offset_y
 
+    def center(self):
+        left_bottom_x, left_bottom_y = self.offset.x, self.offset.y
+        width = self.map.tile_width * (self.map.width / 2)
+        height = self.map.tile_height * (self.map.height / 2)
+        return left_bottom_x + width, left_bottom_y + height
