@@ -36,6 +36,10 @@ class Board:
         tile_offset_x, tile_offset_y = self.positions[PLAYER_PATH_CLASS][str(index)]
         return self.offset.x + tile_offset_x, self.offset.y + tile_offset_y
 
+    def find_position(self, tile_type, tile_key):
+        tile_offset_x, tile_offset_y = self.positions[tile_type][tile_key]
+        return self.offset.x + tile_offset_x, self.offset.y + tile_offset_y
+
     def center(self):
         left_bottom_x, left_bottom_y = self.offset.x, self.offset.y
         width = self.map.tile_width * (self.map.width / 2)

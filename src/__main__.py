@@ -1,6 +1,7 @@
 import arcade
 
 from src import constants
+from src.constants import DICE_CLASS
 from src.entity import board, dice
 from src.entity.player import Player
 
@@ -17,12 +18,14 @@ class PyThopoly(arcade.Window):
 
         self.board = None
         self.player = None
-        self.dice = None
+        self.first_dice = None
+        self.second_dice = None
 
     def setup(self):
         self.board = board.Board("../assets/tilemaps/monopoly.json", self.width, self.height)
         self.player = Player(board=self.board, radius=20)
-        self.dice = dice.Dice("../assets/images/dices/","../assets/images/animated_dices/", self.board.center())
+        self.first_dice = dice.Dice("../assets/images/dices/", "../assets/images/animated_dices/", self.board.find_position(DICE_CLASS, "1"))
+        self.second_dice = dice.Dice("../assets/images/dices/", "../assets/images/animated_dices/", self.board.find_position(DICE_CLASS, "2"))
 
     def on_draw(self):
         """
@@ -31,16 +34,19 @@ class PyThopoly(arcade.Window):
         self.clear()
         self.board.draw()
         self.player.draw()
-        self.dice.draw()
+        self.first_dice.draw()
+        self.second_dice.draw()
 
     def on_update(self, delta_time):
-        self.dice.update(delta_time)
+        self.first_dice.update(delta_time)
+        self.second_dice.update(delta_time)
 
     def on_key_press(self, key, key_modifiers):
         if key == arcade.key.D:
             self.player.next_step(1)
         if key == arcade.key.R:
-            self.dice.select_random_dice()
+            self.first_dice.select_random_dice()
+            self.second_dice.select_random_dice()
 
     def on_key_release(self, key, key_modifiers):
         """

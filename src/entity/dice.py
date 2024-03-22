@@ -26,10 +26,15 @@ class Dice:
             arcade.Sprite(animated_dices_path + "third.png"),
             arcade.Sprite(animated_dices_path + "second.png")
         ]
+        for animated_dice in self.animated_dices:
+            animated_dice.center_x = position[0]
+            animated_dice.center_y = position[1]
+
         self.rolling = False
         self.current_texture = 0
         self.current_time = None
         self.rolling_sprite = self.animated_dices[1]
+
 
     def draw(self):
         if self.rolling:
@@ -47,7 +52,6 @@ class Dice:
             end_time = self.current_time + timedelta(seconds=1)
             if datetime.now() > end_time:
                 self.rolling = False
-                self.current = random.choice(list(self.dices_indexes.items()))
 
     def current_number(self):
         return self.current[0]
@@ -55,6 +59,7 @@ class Dice:
     def select_random_dice(self):
         self.rolling = True
         self.current_time = datetime.now()
+        self.current = random.choice(list(self.dices_indexes.items()))
 
     @staticmethod
     def _create_dice(path, position):
