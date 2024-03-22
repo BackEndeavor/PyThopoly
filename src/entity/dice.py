@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 
 import arcade
 
-from src.constants import DICE_SCALE, UPDATES_PER_FRAME
+from src.constants import UPDATES_PER_FRAME
 
 
 class Dice:
@@ -63,7 +63,7 @@ class Dice:
 
     @staticmethod
     def _create_dice(path, position):
-        dice = arcade.Sprite(path, DICE_SCALE)
+        dice = arcade.Sprite(path)
         dice.center_x = position[0]
         dice.center_y = position[1]
         return dice
