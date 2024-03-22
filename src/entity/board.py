@@ -21,16 +21,19 @@ class Board:
         alignments = cast(ObjectLayer, self.map.get_tilemap_layer('Alignments'))
         self.positions = {}
         for tiled_object in alignments.tiled_objects:
-            if isinstance(tiled_object, Point) and tiled_object.class_ == PLAYER_PATH_CLASS:
+            if isinstance(tiled_object, Point):
                 x, y = tiled_object.coordinates
                 # We are converting from top left coordinate orientation to the bottom left
-                self.positions[int(tiled_object.name)] = (x, board_map_pixel_size[1] - y - 1)
+                object_type = tiled_object.class_
+                if object_type not in self.positions:
+                    self.positions[object_type] = {}
+                self.positions[object_type][tiled_object.name] = (x, board_map_pixel_size[1] - y - 1)
 
     def draw(self):
         self.scene.draw()
 
     def index_to_position(self, index):
-        tile_offset_x, tile_offset_y = self.positions[index]
+        tile_offset_x, tile_offset_y = self.positions[PLAYER_PATH_CLASS][str(index)]
         return self.offset.x + tile_offset_x, self.offset.y + tile_offset_y
 
     def center(self):

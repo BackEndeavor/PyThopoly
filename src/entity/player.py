@@ -1,5 +1,7 @@
 import arcade
 
+from src.constants import PLAYER_PATH_CLASS
+
 
 class Player:
     def __init__(self, board, radius, position_index=0, money=0):
@@ -14,7 +16,7 @@ class Player:
 
     def next_step(self, amount):
         new_position = self.position_index + amount
-        if new_position not in self.board.positions:
-            self.position_index = new_position % len(self.board.positions)
+        if new_position not in self.board.positions[PLAYER_PATH_CLASS]:
+            self.position_index = new_position % len(self.board.positions[PLAYER_PATH_CLASS])
             return
         self.position_index += amount
