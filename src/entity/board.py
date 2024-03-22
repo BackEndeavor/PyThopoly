@@ -3,9 +3,9 @@ from typing import cast
 import arcade
 import pyglet
 from pytiled_parser import ObjectLayer
-from pytiled_parser.tiled_object import Point
+from pytiled_parser.tiled_object import Point, Rectangle
 
-from src.constants import PLAYER_PATH_CLASS
+from src.constants import PLAYER_PATH_CLASS, COLOR_TILE_CLASS
 
 
 class Board:
@@ -19,6 +19,11 @@ class Board:
         self.height = self.map.height - 2
 
         self.positions = self._load_positions(board_map_pixel_size)
+        self.houses = {}
+
+        color_tiles = self.positions[COLOR_TILE_CLASS]
+        for color_tile in color_tiles:
+            self.houses[color_tile] = House(int(color_tile), self)
 
     def _load_positions(self, board_map_pixel_size):
         positions = {}
@@ -42,6 +47,8 @@ class Board:
         return positions
 
     def draw(self):
+        for house in self.houses.values():
+            house.draw()
         self.scene.draw()
 
     def index_to_position(self, index):
@@ -65,3 +72,18 @@ class Board:
         width = self.map.tile_width * (self.map.width / 2)
         height = self.map.tile_height * (self.map.height / 2)
         return left_bottom_x + width, left_bottom_y + height
+
+
+class House:
+    def __init__(self, index, board):
+        self.index = index
+        self.board = board
+        self.level = 1
+        self.sold = False
+        self.has_owner = False
+
+    def draw(self):
+        if not self.has_owner:
+            return
+        rectangle_x, rectangle_y, width, height = self.board.find_position(COLOR_TILE_CLASS, str(self.index))
+        arcade.draw_rectangle_filled(rectangle_x + width / 2, rectangle_y - height / 2, width, height, arcade.color.BRIGHT_LILAC)

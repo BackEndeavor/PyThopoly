@@ -10,3 +10,4 @@ UPDATES_PER_FRAME = 5
 
 PLAYER_PATH_CLASS = 'player_path'
 DICE_CLASS = "dice"
+COLOR_TILE_CLASS = 'color_tile'
