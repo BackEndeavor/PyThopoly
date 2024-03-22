@@ -18,16 +18,28 @@ class Board:
         self.width = self.map.width - 2
         self.height = self.map.height - 2
 
+        self.positions = self._load_positions(board_map_pixel_size)
+
+    def _load_positions(self, board_map_pixel_size):
+        positions = {}
         alignments = cast(ObjectLayer, self.map.get_tilemap_layer('Alignments'))
-        self.positions = {}
         for tiled_object in alignments.tiled_objects:
             if isinstance(tiled_object, Point):
                 x, y = tiled_object.coordinates
                 # We are converting from top left coordinate orientation to the bottom left
                 object_type = tiled_object.class_
-                if object_type not in self.positions:
-                    self.positions[object_type] = {}
-                self.positions[object_type][tiled_object.name] = (x, board_map_pixel_size[1] - y - 1)
+                if object_type not in positions:
+                    positions[object_type] = {}
+                positions[object_type][tiled_object.name] = (x, board_map_pixel_size[1] - y - 1)
+            if isinstance(tiled_object, Rectangle):
+                x, y = tiled_object.coordinates
+                width, height = tiled_object.size
+                # We are converting from top left coordinate orientation to the bottom left
+                object_type = tiled_object.class_
+                if object_type not in positions:
+                    positions[object_type] = {}
+                positions[object_type][tiled_object.name] = (x, board_map_pixel_size[1] - y - 1, width, height)
+        return positions
 
     def draw(self):
         self.scene.draw()
@@ -37,8 +49,16 @@ class Board:
         return self.offset.x + tile_offset_x, self.offset.y + tile_offset_y
 
     def find_position(self, tile_type, tile_key):
-        tile_offset_x, tile_offset_y = self.positions[tile_type][tile_key]
-        return self.offset.x + tile_offset_x, self.offset.y + tile_offset_y
+        tile_type_positions = self.positions.get(tile_type)
+        if tile_type_positions is None:
+            return None
+        position = tile_type_positions.get(tile_key)
+        if position is None:
+            return None
+        result = [self.offset.x + position[0], self.offset.y + position[1]]
+        for i in range(2, len(position)):
+            result.append(position[i])
+        return result
 
     def center(self):
         left_bottom_x, left_bottom_y = self.offset.x, self.offset.y
