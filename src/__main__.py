@@ -48,6 +48,7 @@ class PyThopoly(arcade.Window):
         if key == arcade.key.R:
             self.first_dice.select_random_dice()
             self.second_dice.select_random_dice()
+            self.player.next_step(self.first_dice.current_number() + self.second_dice.current_number())
         if key == arcade.key.B:
             house = self.board.houses.get(str(self.player.position_index))
             if house is not None:

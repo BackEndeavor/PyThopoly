@@ -2,9 +2,11 @@ from abc import abstractmethod, ABC
 
 import arcade
 
+from src.animation.easing import linear
+
 
 class MoveTransition(ABC):
-    def __init__(self, animation_speed):
+    def __init__(self, animation_speed, easing=linear):
         self._start_x = 0
         self._start_y = 0
         self._target_x = 0
@@ -12,14 +14,15 @@ class MoveTransition(ABC):
         self._animation_progress = 0
         self._animation_done = False
         self.animation_speed = animation_speed
+        self.easing = easing
 
     def update_animation(self):
         if self._animation_progress >= 1:
             self._animation_done = True
             self.update_position(self._target_x, self._target_y)
             return
-        x = arcade.lerp(self._start_x, self._target_x, self._animation_progress)
-        y = arcade.lerp(self._start_y, self._target_y, self._animation_progress)
+        x = arcade.lerp(self._start_x, self._target_x, self.easing(self._animation_progress))
+        y = arcade.lerp(self._start_y, self._target_y, self.easing(self._animation_progress))
         self.update_position(x, y)
         self._animation_progress += self.animation_speed
 
