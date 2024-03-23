@@ -1,9 +1,9 @@
 import random
-from datetime import datetime, timedelta
+from datetime import datetime
 
 import arcade
 
-from src.constants import UPDATES_PER_FRAME
+from src.constants import UPDATES_PER_FRAME, DICE_ROLL_DURATION
 
 
 class Dice:
@@ -35,6 +35,7 @@ class Dice:
         self.current_texture = 0
         self.current_time = None
         self.rolling_sprite = self.animated_dices[1]
+        self.dice_callback = None
 
     def draw(self):
         if self.rolling:
@@ -52,6 +53,9 @@ class Dice:
             end_time = self.current_time + timedelta(milliseconds=500)
             if datetime.now() > end_time:
                 self.rolling = False
+                if self.dice_callback is None:
+                    return
+                self.dice_callback()
 
     def current_number(self):
         return self.current[0]
