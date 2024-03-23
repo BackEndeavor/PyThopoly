@@ -40,4 +40,22 @@ class ThrowDicePopup(BasePopup):
         super().show()
 
 
+class BuyHousePopup(BasePopup):
+    def __init__(self, ui_manager, board_map, callback=None):
+        super().__init__(board_map, ui_manager, '0')
+        self.callback = callback
 
+    def on_house_buy(self, button):
+        self.callback()
+
+    def show_house(self, house):
+        self.layout.add(arcade.gui.UIMessageBox(
+            width=self.width,
+            height=self.height,
+            message_text=(
+                "Хотите купить дом?"
+            ),
+            buttons=["Купить", "Отказаться"],
+            callback=self.on_house_buy
+        ))
+        super().show()
