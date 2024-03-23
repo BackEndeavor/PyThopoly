@@ -4,10 +4,10 @@ from src.constants import UI_POPUP_CLASS
 
 
 class BasePopup:
-    def __init__(self, board, ui_manager, index):
-        self.board = board
+    def __init__(self, board_map, ui_manager, index):
+        self.board_map = board_map
         self.ui_manager = ui_manager
-        rectangle = self.board.find_position(UI_POPUP_CLASS, index)
+        rectangle = self.board_map.find_position(UI_POPUP_CLASS, index)
         self.x, self.y, self.width, self.height = rectangle
         self.y -= self.height
         self.layout = arcade.gui.UILayout(self.x, self.y, self.width, self.height)
@@ -20,8 +20,8 @@ class BasePopup:
 
 
 class ThrowDicePopup(BasePopup):
-    def __init__(self, ui_manager, board, callback):
-        super().__init__(board, ui_manager, '0')
+    def __init__(self, ui_manager, board_map, callback=None):
+        super().__init__(board_map, ui_manager, '0')
         self.callback = callback
 
     def on_dice_throw(self, button):

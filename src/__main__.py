@@ -3,9 +3,11 @@ from arcade.gui import UIManager
 
 from src import constants
 from src.constants import DICE_CLASS
-from src.entity import board, dice
+from src.entity import dice
+from src.entity.board import Board
+from src.entity.board_map import BoardTileMap
 from src.entity.player import Player
-from src.gui.popup.board_popup import ThrowDicePopup
+from src.gui.popup.board_popup import ThrowDicePopup, BuyHousePopup
 
 
 class PyThopoly(arcade.Window):
@@ -20,24 +22,25 @@ class PyThopoly(arcade.Window):
 
         self.ui_manager = None
 
+        self.board_map = None
         self.board = None
         self.player = None
         self.first_dice = None
         self.second_dice = None
 
         self.throw_dice_popup = None
-        self.buy_home_popup = None
+        self.buy_house_popup = None
 
     def setup(self):
         self.ui_manager = UIManager()
         self.ui_manager.enable()
 
-        self.board = board.Board("../assets/tilemaps/monopoly.json", self.width, self.height)
-        self.player = Player(board=self.board, radius=20)
-        self.first_dice = dice.Dice("../assets/images/dices/", "../assets/images/animated_dices/", self.board.find_position(DICE_CLASS, "1"))
-        self.second_dice = dice.Dice("../assets/images/dices/", "../assets/images/animated_dices/", self.board.find_position(DICE_CLASS, "2"))
+        self.board_map = BoardTileMap("../assets/tilemaps/monopoly.json", self.width, self.height)
+        self.player = Player(board_map=self.board_map, radius=20)
+        self.first_dice = dice.Dice("../assets/images/dices/", "../assets/images/animated_dices/", self.board_map.find_position(DICE_CLASS, "1"))
+        self.second_dice = dice.Dice("../assets/images/dices/", "../assets/images/animated_dices/", self.board_map.find_position(DICE_CLASS, "2"))
 
-        self.throw_dice_popup = ThrowDicePopup(self.ui_manager, self.board, self.throw_dice)
+        self.throw_dice_popup = ThrowDicePopup(self.ui_manager, self.board_map)
 
         self.throw_dice_popup.show()
         self.first_dice.dice_callback = self.dice_fall
@@ -48,7 +51,7 @@ class PyThopoly(arcade.Window):
         """
         self.clear()
         self.ui_manager.draw()
-        self.board.draw()
+        self.board_map.draw()
         self.player.draw()
         self.first_dice.draw()
         self.second_dice.draw()
@@ -57,14 +60,6 @@ class PyThopoly(arcade.Window):
         self.first_dice.update(delta_time)
         self.second_dice.update(delta_time)
         self.player.update()
-
-    def dice_fall(self):
-        self.player.next_step(self.first_dice.current_number() + self.second_dice.current_number())
-        self.throw_dice_popup.show()
-
-    def throw_dice(self):
-        self.first_dice.select_random_dice()
-        self.second_dice.select_random_dice()
 
     def on_key_release(self, key, key_modifiers):
         pass
