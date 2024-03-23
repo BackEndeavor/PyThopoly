@@ -42,8 +42,8 @@ class PyThopoly(arcade.Window):
 
         self.throw_dice_popup = ThrowDicePopup(self.ui_manager, self.board_map)
 
-        self.throw_dice_popup.show()
-        self.first_dice.dice_callback = self.dice_fall
+        self.board = Board(self)
+        self.board.start_game()
 
     def on_draw(self):
         """

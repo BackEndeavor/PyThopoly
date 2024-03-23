@@ -1,89 +1,37 @@
-from typing import cast
-
-import arcade
-import pyglet
-from pytiled_parser import ObjectLayer
-from pytiled_parser.tiled_object import Point, Rectangle
-
-from src.constants import PLAYER_PATH_CLASS, COLOR_TILE_CLASS
+from src.constants import COLOR_TILE_CLASS
+from src.entity.house import House
 
 
 class Board:
-    def __init__(self, tilemap_path, width, height):
-        self.map = arcade.load_tilemap(tilemap_path)
-        board_map_pixel_size = (self.map.tile_width * self.map.width, self.map.tile_height * self.map.height)
-        self.offset = pyglet.math.Vec2((width - board_map_pixel_size[0]) / 2, (height - board_map_pixel_size[1]) / 2)
-        self.map = arcade.load_tilemap(tilemap_path, offset=self.offset)
-        self.scene = arcade.Scene.from_tilemap(self.map)
-        self.width = self.map.width - 2
-        self.height = self.map.height - 2
-
-        self.positions = self._load_positions(board_map_pixel_size)
+    def __init__(self, window):
+        self.window = window
+        self.player = window.player
+        self.board_map = window.board_map
+        self.first_dice = window.first_dice
+        self.second_dice = window.second_dice
+        self.throw_dice_popup = window.throw_dice_popup
+        self.buy_house_popup = window.buy_house_popup
+        self.throw_dice_popup.callback = self.throw_dice
         self.houses = {}
+        self._load_houses()
 
-        color_tiles = self.positions[COLOR_TILE_CLASS]
+    def _load_houses(self):
+        color_tiles = self.board_map.positions[COLOR_TILE_CLASS]
         for color_tile in color_tiles:
-            self.houses[color_tile] = House(int(color_tile), self)
+            self.houses[color_tile] = House(int(color_tile), self.board_map)
 
-    def _load_positions(self, board_map_pixel_size):
-        positions = {}
-        alignments = cast(ObjectLayer, self.map.get_tilemap_layer('Alignments'))
-        for tiled_object in alignments.tiled_objects:
-            if isinstance(tiled_object, Point):
-                x, y = tiled_object.coordinates
-                # We are converting from top left coordinate orientation to the bottom left
-                object_type = tiled_object.class_
-                if object_type not in positions:
-                    positions[object_type] = {}
-                positions[object_type][tiled_object.name] = (x, board_map_pixel_size[1] - y - 1)
-            if isinstance(tiled_object, Rectangle):
-                x, y = tiled_object.coordinates
-                width, height = tiled_object.size
-                # We are converting from top left coordinate orientation to the bottom left
-                object_type = tiled_object.class_
-                if object_type not in positions:
-                    positions[object_type] = {}
-                positions[object_type][tiled_object.name] = (x, board_map_pixel_size[1] - y - 1, width, height)
-        return positions
+    def start_game(self):
+        self.throw_dice_popup.show()
+        self.first_dice.dice_callback = self.on_dice_fall
 
-    def draw(self):
-        for house in self.houses.values():
-            house.draw()
-        self.scene.draw()
+    def on_dice_fall(self):
+        self.player.next_step(self.first_dice.current_number() + self.second_dice.current_number())
+        house = self.houses[str(self.player.position_index)]
+        if house is None:
+            self.throw_dice_popup.show()
+        else:
+            self.buy_house_popup.show_house(house)
 
-    def index_to_position(self, index):
-        tile_offset_x, tile_offset_y = self.positions[PLAYER_PATH_CLASS][str(index)]
-        return self.offset.x + tile_offset_x, self.offset.y + tile_offset_y
-
-    def find_position(self, tile_type, tile_key):
-        tile_type_positions = self.positions.get(tile_type)
-        if tile_type_positions is None:
-            return None
-        position = tile_type_positions.get(tile_key)
-        if position is None:
-            return None
-        result = [self.offset.x + position[0], self.offset.y + position[1]]
-        for i in range(2, len(position)):
-            result.append(position[i])
-        return result
-
-    def center(self):
-        left_bottom_x, left_bottom_y = self.offset.x, self.offset.y
-        width = self.map.tile_width * (self.map.width / 2)
-        height = self.map.tile_height * (self.map.height / 2)
-        return left_bottom_x + width, left_bottom_y + height
-
-
-class House:
-    def __init__(self, index, board):
-        self.index = index
-        self.board = board
-        self.level = 1
-        self.sold = False
-        self.has_owner = False
-
-    def draw(self):
-        if not self.has_owner:
-            return
-        rectangle_x, rectangle_y, width, height = self.board.find_position(COLOR_TILE_CLASS, str(self.index))
-        arcade.draw_rectangle_filled(rectangle_x + width / 2, rectangle_y - height / 2, width, height, arcade.color.BRIGHT_LILAC)
+    def throw_dice(self):
+        self.first_dice.select_random_dice()
+        self.second_dice.select_random_dice()
