@@ -48,6 +48,7 @@ class PyThopoly(arcade.Window):
         if key == arcade.key.R:
             self.first_dice.select_random_dice()
             self.second_dice.select_random_dice()
+            self.player.next_step(self.first_dice.current_number() + self.second_dice.current_number())
 
     def on_key_release(self, key, key_modifiers):
         """

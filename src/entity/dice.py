@@ -36,7 +36,6 @@ class Dice:
         self.current_time = None
         self.rolling_sprite = self.animated_dices[1]
 
-
     def draw(self):
         if self.rolling:
             self.rolling_sprite.draw()
@@ -50,7 +49,7 @@ class Dice:
                 self.current_texture = 0
             frame = self.current_texture // UPDATES_PER_FRAME
             self.rolling_sprite = self.animated_dices[frame]
-            end_time = self.current_time + timedelta(seconds=1)
+            end_time = self.current_time + timedelta(milliseconds=500)
             if datetime.now() > end_time:
                 self.rolling = False
 
