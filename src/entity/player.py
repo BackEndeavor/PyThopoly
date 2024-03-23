@@ -1,12 +1,13 @@
 import arcade
 
+from src.animation.easing import ease_in_out_quad
 from src.animation.transition import MoveTransition
 from src.constants import PLAYER_PATH_CLASS, MOVE_TRANSITION_SPEED
 
 
 class Player(MoveTransition):
     def __init__(self, board, radius, position_index=0, money=0):
-        super().__init__(MOVE_TRANSITION_SPEED)
+        super().__init__(MOVE_TRANSITION_SPEED, easing=ease_in_out_quad)
         self.board = board
         self.radius = radius
         self.money = money
