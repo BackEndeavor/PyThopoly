@@ -41,6 +41,7 @@ class PyThopoly(arcade.Window):
         self.second_dice = dice.Dice("../assets/images/dices/", "../assets/images/animated_dices/", self.board_map.find_position(DICE_CLASS, "2"))
 
         self.throw_dice_popup = ThrowDicePopup(self.ui_manager, self.board_map)
+        self.buy_house_popup = BuyHousePopup(self.ui_manager, self.board_map)
 
         self.board = Board(self)
         self.board.start_game()

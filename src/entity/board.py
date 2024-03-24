@@ -26,7 +26,7 @@ class Board:
 
     def on_dice_fall(self):
         self.player.next_step(self.first_dice.current_number() + self.second_dice.current_number())
-        house = self.houses[str(self.player.position_index)]
+        house = self.houses.get(str(self.player.position_index))
         if house is None:
             self.throw_dice_popup.show()
         else:
