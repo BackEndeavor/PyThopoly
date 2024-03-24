@@ -1,4 +1,6 @@
 import datetime
+import os
+from pathlib import Path
 
 import arcade
 
@@ -16,3 +18,4 @@ UI_POPUP_CLASS = 'ui_popup'
 
 MOVE_TRANSITION_SPEED = 0.05
 DICE_ROLL_DURATION = datetime.timedelta(seconds=1)
+ASSETS_FOLDER = os.path.abspath(os.path.join(Path(os.path.dirname(os.path.abspath(__file__))).parent, './assets'))

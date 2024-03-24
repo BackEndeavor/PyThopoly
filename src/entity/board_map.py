@@ -1,3 +1,4 @@
+import os
 from typing import cast
 
 import arcade
@@ -5,7 +6,7 @@ import pyglet
 from pytiled_parser import ObjectLayer
 from pytiled_parser.tiled_object import Point, Rectangle
 
-from src.constants import PLAYER_PATH_CLASS, COLOR_TILE_CLASS
+from src.constants import PLAYER_PATH_CLASS, COLOR_TILE_CLASS, ASSETS_FOLDER
 
 
 class BoardTileMap:
@@ -14,12 +15,28 @@ class BoardTileMap:
         board_map_pixel_size = (self.map.tile_width * self.map.width, self.map.tile_height * self.map.height)
         self.offset = pyglet.math.Vec2((width - board_map_pixel_size[0]) / 2, (height - board_map_pixel_size[1]) / 2)
         self.map = arcade.load_tilemap(tilemap_path, offset=self.offset)
+        self.logos = arcade.SpriteList()
         self.scene = arcade.Scene.from_tilemap(self.map)
         self.width = self.map.width - 2
         self.height = self.map.height - 2
 
         self.positions = self._load_positions(board_map_pixel_size)
-        self.houses = {}
+
+        self._load_logos()
+
+    def _load_logos(self):
+        color_tiles = self.positions.get(COLOR_TILE_CLASS)
+        if color_tiles is None:
+            return
+        for index, rectangle in color_tiles.items():
+            x, y, width, height = rectangle
+            x, y = self.offset_position(x, y)
+            sprite = arcade.Sprite(f'{ASSETS_FOLDER}/tilemaps/images/{index}.png')
+            sprite.center_x = x + width / 2
+            sprite.center_y = y - height / 2
+            sprite.width = width
+            sprite.height = height
+            self.logos.append(sprite)
 
     def _load_positions(self, board_map_pixel_size):
         positions = {}
@@ -43,13 +60,15 @@ class BoardTileMap:
         return positions
 
     def draw(self):
-        for house in self.houses.values():
-            house.draw()
         self.scene.draw()
+        self.logos.draw()
 
     def index_to_position(self, index):
         tile_offset_x, tile_offset_y = self.positions[PLAYER_PATH_CLASS][str(index)]
         return self.offset.x + tile_offset_x, self.offset.y + tile_offset_y
+
+    def offset_position(self, x, y):
+        return self.offset.x + x, self.offset.y + y
 
     def find_position(self, tile_type, tile_key):
         tile_type_positions = self.positions.get(tile_type)
