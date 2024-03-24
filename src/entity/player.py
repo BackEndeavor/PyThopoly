@@ -12,6 +12,7 @@ class Player(MoveTransition):
         self.radius = radius
         self.money = money
         self.position_index = position_index
+        self.color = arcade.color.GOLD
 
         x, y = self.board_map.index_to_position(self.position_index)
         self.current_x = x
@@ -33,6 +34,9 @@ class Player(MoveTransition):
             return
 
         self.move(x, y)
+
+    def buy_house(self, house):
+        house.owner = self
 
     def next_step(self, amount):
         new_position = self.position_index + amount

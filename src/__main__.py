@@ -2,7 +2,7 @@ import arcade
 from arcade.gui import UIManager
 
 from src import constants
-from src.constants import DICE_CLASS
+from src.constants import DICE_CLASS, ASSETS_FOLDER
 from src.entity import dice
 from src.entity.board import Board
 from src.entity.board_map import BoardTileMap
@@ -35,10 +35,10 @@ class PyThopoly(arcade.Window):
         self.ui_manager = UIManager()
         self.ui_manager.enable()
 
-        self.board_map = BoardTileMap("../assets/tilemaps/monopoly.json", self.width, self.height)
+        self.board_map = BoardTileMap(ASSETS_FOLDER + "/tilemaps/monopoly.json", self.width, self.height)
         self.player = Player(board_map=self.board_map, radius=20)
-        self.first_dice = dice.Dice("../assets/images/dices/", "../assets/images/animated_dices/", self.board_map.find_position(DICE_CLASS, "1"))
-        self.second_dice = dice.Dice("../assets/images/dices/", "../assets/images/animated_dices/", self.board_map.find_position(DICE_CLASS, "2"))
+        self.first_dice = dice.Dice(ASSETS_FOLDER + "/images/dices/", ASSETS_FOLDER + "/images/animated_dices/", self.board_map.find_position(DICE_CLASS, "1"))
+        self.second_dice = dice.Dice(ASSETS_FOLDER + "/images/dices/", ASSETS_FOLDER + "/images/animated_dices/", self.board_map.find_position(DICE_CLASS, "2"))
 
         self.throw_dice_popup = ThrowDicePopup(self.ui_manager, self.board_map)
         self.buy_house_popup = BuyHousePopup(self.ui_manager, self.board_map)
@@ -52,6 +52,7 @@ class PyThopoly(arcade.Window):
         """
         self.clear()
         self.ui_manager.draw()
+        self.board.draw()
         self.board_map.draw()
         self.player.draw()
         self.first_dice.draw()

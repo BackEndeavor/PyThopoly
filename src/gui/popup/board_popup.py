@@ -45,17 +45,22 @@ class BuyHousePopup(BasePopup):
         super().__init__(board_map, ui_manager, '0')
         self.callback = callback
 
-    def on_house_buy(self, button):
-        self.callback()
+    def on_house_buy(self, button, house):
+        self.callback(button == "Отказаться", house)
 
     def show_house(self, house):
-        self.layout.add(arcade.gui.UIMessageBox(
+        def on_house_buy(button):
+            self.on_house_buy(button, house)
+
+        message_box = arcade.gui.UIMessageBox(
             width=self.width,
             height=self.height,
             message_text=(
                 "Хотите купить дом?"
             ),
             buttons=["Купить", "Отказаться"],
-            callback=self.on_house_buy
-        ))
+            callback=on_house_buy
+        )
+        self.layout.add(message_box)
+
         super().show()

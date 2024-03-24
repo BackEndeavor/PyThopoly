@@ -12,8 +12,13 @@ class Board:
         self.throw_dice_popup = window.throw_dice_popup
         self.buy_house_popup = window.buy_house_popup
         self.throw_dice_popup.callback = self.throw_dice
+        self.buy_house_popup.callback = self.buy_house
         self.houses = {}
         self._load_houses()
+
+    def draw(self):
+        for house in self.houses.values():
+            house.draw()
 
     def _load_houses(self):
         color_tiles = self.board_map.positions[COLOR_TILE_CLASS]
@@ -35,3 +40,10 @@ class Board:
     def throw_dice(self):
         self.first_dice.select_random_dice()
         self.second_dice.select_random_dice()
+
+    def buy_house(self, cancelled, house):
+        if cancelled:
+            self.throw_dice_popup.show()
+            return
+        self.player.buy_house(house)
+        self.throw_dice_popup.show()
