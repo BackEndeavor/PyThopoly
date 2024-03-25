@@ -1,0 +1,332 @@
+[
+  {
+    "name": "KazPost",
+    "price": 60,
+    "price_per_house": 50,
+    "rent": [
+      2,
+      10,
+      30,
+      90,
+      160,
+      250
+    ],
+    "mortgage": 30,
+    "tile": 17
+  },
+  {
+    "name": "TemirZhol",
+    "price": 60,
+    "price_per_house": 50,
+    "rent": [
+      4,
+      20,
+      60,
+      180,
+      320,
+      450
+    ],
+    "mortgage": 30,
+    "tile": 19
+  },
+  {
+    "name": "AsemAi",
+    "price": 100,
+    "price_per_house": 50,
+    "rent": [
+      6,
+      30,
+      90,
+      270,
+      400,
+      550
+    ],
+    "mortgage": 50,
+    "tile": 6
+  },
+  {
+    "name": "Tassay",
+    "price": 100,
+    "price_per_house": 50,
+    "rent": [
+      6,
+      30,
+      90,
+      270,
+      400,
+      550
+    ],
+    "mortgage": 50,
+    "tile": 7
+  },
+  {
+    "name": "Saryagash",
+    "price": 120,
+    "price_per_house": 50,
+    "rent": [
+      8,
+      40,
+      100,
+      300,
+      450,
+      600
+    ],
+    "mortgage": 60,
+    "tile": 9
+  },
+  {
+    "name": "Beeline",
+    "price": 140,
+    "price_per_house": 100,
+    "rent": [
+      10,
+      50,
+      150,
+      450,
+      625,
+      750
+    ],
+    "mortgage": 70,
+    "tile": 29
+  },
+  {
+    "name": "Altel",
+    "price": 140,
+    "price_per_house": 100,
+    "rent": [
+      10,
+      50,
+      150,
+      450,
+      625,
+      750
+    ],
+    "mortgage": 70,
+    "tile": 28
+  },
+  {
+    "name": "Tele2",
+    "price": 160,
+    "price_per_house": 100,
+    "rent": [
+      12,
+      60,
+      180,
+      500,
+      700,
+      900
+    ],
+    "mortgage": 80,
+    "tile": 26
+  },
+  {
+    "name": "Tengizchevroil",
+    "price": 180,
+    "price_per_house": 100,
+    "rent": [
+      14,
+      70,
+      200,
+      550,
+      750,
+      950
+    ],
+    "mortgage": 90,
+    "tile": 11
+  },
+  {
+    "name": "KazTransOil",
+    "price": 180,
+    "price_per_house": 100,
+    "rent": [
+      14,
+      70,
+      200,
+      550,
+      750,
+      950
+    ],
+    "mortgage": 90,
+    "tile": 12
+  },
+  {
+    "name": "KazMunayGas",
+    "price": 200,
+    "price_per_house": 100,
+    "rent": [
+      16,
+      80,
+      220,
+      600,
+      800,
+      1000
+    ],
+    "mortgage": 100,
+    "tile": 14
+  },
+  {
+    "name": "HalykBank",
+    "price": 220,
+    "price_per_house": 150,
+    "rent": [
+      18,
+      90,
+      250,
+      700,
+      875,
+      1050
+    ],
+    "mortgage": 110,
+    "tile": 34
+  },
+  {
+    "name": "ForteBank",
+    "price": 220,
+    "price_per_house": 150,
+    "rent": [
+      18,
+      90,
+      250,
+      700,
+      875,
+      1050
+    ],
+    "mortgage": 110,
+    "tile": 31
+  },
+  {
+    "name": "KaspiBank",
+    "price": 240,
+    "price_per_house": 150,
+    "rent": [
+      20,
+      100,
+      300,
+      750,
+      925,
+      1100
+    ],
+    "mortgage": 120,
+    "tile": 33
+  },
+  {
+    "name": "KazakhGold",
+    "price": 260,
+    "price_per_house": 150,
+    "rent": [
+      22,
+      110,
+      330,
+      800,
+      975,
+      1150
+    ],
+    "mortgage": 130,
+    "tile": 39
+  },
+  {
+    "name": "KazakhMys",
+    "price": 260,
+    "price_per_house": 150,
+    "rent": [
+      22,
+      110,
+      330,
+      800,
+      975,
+      1150
+    ],
+    "mortgage": 130,
+    "tile": 38
+  },
+  {
+    "name": "Kazzinc",
+    "price": 280,
+    "price_per_house": 150,
+    "rent": [
+      24,
+      120,
+      360,
+      850,
+      1025,
+      1200
+    ],
+    "mortgage": 140,
+    "tile": 36
+  },
+  {
+    "name": "SCAT",
+    "price": 300,
+    "price_per_house": 200,
+    "rent": [
+      26,
+      130,
+      390,
+      900,
+      1100,
+      1275
+    ],
+    "mortgage": 150,
+    "tile": 1
+  },
+  {
+    "name": "FlyArystan",
+    "price": 300,
+    "price_per_house": 200,
+    "rent": [
+      26,
+      130,
+      390,
+      900,
+      1100,
+      1275
+    ],
+    "mortgage": 150,
+    "tile": 3
+  },
+  {
+    "name": "AirAstana",
+    "price": 320,
+    "price_per_house": 200,
+    "rent": [
+      28,
+      150,
+      450,
+      1000,
+      1200,
+      1400
+    ],
+    "mortgage": 160,
+    "tile": 4
+  },
+  {
+    "name": "Magnum",
+    "price": 350,
+    "price_per_house": 200,
+    "rent": [
+      35,
+      175,
+      500,
+      1100,
+      1300,
+      1500
+    ],
+    "mortgage": 175,
+    "tile": 23
+  },
+  {
+    "name": "Small",
+    "price": 400,
+    "price_per_house": 200,
+    "rent": [
+      50,
+      200,
+      600,
+      1400,
+      1700,
+      2000
+    ],
+    "mortgage": 200,
+    "tile": 21
+  }
+]

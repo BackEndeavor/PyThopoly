@@ -1,4 +1,6 @@
-from src.constants import COLOR_TILE_CLASS
+import json
+
+from src.constants import COLOR_TILE_CLASS, ASSETS_FOLDER
 from src.entity.house import House
 
 
@@ -13,6 +15,9 @@ class Board:
         self.buy_house_popup = window.buy_house_popup
         self.throw_dice_popup.callback = self.throw_dice
         self.buy_house_popup.callback = self.buy_house
+
+        with open(ASSETS_FOLDER + '/house_prices.json') as house_prices:
+            self.house_prices = json.load(house_prices)
         self.houses = {}
         self._load_houses()
 
