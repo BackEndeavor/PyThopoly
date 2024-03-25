@@ -14,13 +14,17 @@ class Player(MoveTransition):
         self.position_index = position_index
         self.color = arcade.color.GOLD
 
+        r, g, b = self.color
+        self.outline_color = (r * 0.5, g * 0.5, b * 0.5)
+
         x, y = self.board_map.index_to_position(self.position_index)
         self.current_x = x
         self.current_y = y
         self._set_start_position(x, y)
 
     def draw(self):
-        arcade.draw_circle_filled(self.current_x, self.current_y, self.radius, arcade.color.GOLD)
+        arcade.draw_circle_outline(self.current_x, self.current_y, self.radius + 4, self.outline_color, self.radius)
+        arcade.draw_circle_filled(self.current_x, self.current_y, self.radius, self.color)
 
     def update(self):
         self.update_animation()
