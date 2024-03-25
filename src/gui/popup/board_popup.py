@@ -56,7 +56,7 @@ class BuyHousePopup(BasePopup):
             width=self.width,
             height=self.height,
             message_text=(
-                "Хотите купить дом?"
+                "Хотите купить компанию?"
             ),
             buttons=["Купить", "Отказаться"],
             callback=on_house_buy
