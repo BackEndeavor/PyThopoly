@@ -39,8 +39,11 @@ class Board:
         house = self.houses.get(str(self.player.position_index))
         if house is None:
             self.throw_dice_popup.show()
-        else:
+        elif house.owner is None:
             self.buy_house_popup.show_house(house)
+        else:
+            # TODO: Make rent popup if owner not equals player
+            self.throw_dice_popup.show()
 
     def throw_dice(self):
         self.first_dice.select_random_dice()
