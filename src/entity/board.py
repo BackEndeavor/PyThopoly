@@ -1,47 +1,57 @@
-from typing import cast
+import json
 
-import arcade
-import pyglet
-from pytiled_parser import ObjectLayer
-from pytiled_parser.tiled_object import Point
-
-from src.constants import PLAYER_PATH_CLASS
+from src.constants import COLOR_TILE_CLASS, ASSETS_FOLDER
+from src.entity.house import House
 
 
 class Board:
-    def __init__(self, tilemap_path, width, height):
-        self.map = arcade.load_tilemap(tilemap_path)
-        board_map_pixel_size = (self.map.tile_width * self.map.width, self.map.tile_height * self.map.height)
-        self.offset = pyglet.math.Vec2((width - board_map_pixel_size[0]) / 2, (height - board_map_pixel_size[1]) / 2)
-        self.map = arcade.load_tilemap(tilemap_path, offset=self.offset)
-        self.scene = arcade.Scene.from_tilemap(self.map)
-        self.width = self.map.width - 2
-        self.height = self.map.height - 2
+    def __init__(self, window):
+        self.window = window
+        self.player = window.player
+        self.board_map = window.board_map
+        self.first_dice = window.first_dice
+        self.second_dice = window.second_dice
+        self.throw_dice_popup = window.throw_dice_popup
+        self.buy_house_popup = window.buy_house_popup
+        self.throw_dice_popup.callback = self.throw_dice
+        self.buy_house_popup.callback = self.buy_house
 
-        alignments = cast(ObjectLayer, self.map.get_tilemap_layer('Alignments'))
-        self.positions = {}
-        for tiled_object in alignments.tiled_objects:
-            if isinstance(tiled_object, Point):
-                x, y = tiled_object.coordinates
-                # We are converting from top left coordinate orientation to the bottom left
-                object_type = tiled_object.class_
-                if object_type not in self.positions:
-                    self.positions[object_type] = {}
-                self.positions[object_type][tiled_object.name] = (x, board_map_pixel_size[1] - y - 1)
+        with open(ASSETS_FOLDER + '/house_prices.json') as house_prices:
+            self.house_prices = json.load(house_prices)
+        self.houses = {}
+        self._load_houses()
 
     def draw(self):
-        self.scene.draw()
+        for house in self.houses.values():
+            house.draw()
 
-    def index_to_position(self, index):
-        tile_offset_x, tile_offset_y = self.positions[PLAYER_PATH_CLASS][str(index)]
-        return self.offset.x + tile_offset_x, self.offset.y + tile_offset_y
+    def _load_houses(self):
+        color_tiles = self.board_map.positions[COLOR_TILE_CLASS]
+        for color_tile in color_tiles:
+            self.houses[color_tile] = House(int(color_tile), self.board_map)
 
-    def find_position(self, tile_type, tile_key):
-        tile_offset_x, tile_offset_y = self.positions[tile_type][tile_key]
-        return self.offset.x + tile_offset_x, self.offset.y + tile_offset_y
+    def start_game(self):
+        self.throw_dice_popup.show()
+        self.first_dice.dice_callback = self.on_dice_fall
 
-    def center(self):
-        left_bottom_x, left_bottom_y = self.offset.x, self.offset.y
-        width = self.map.tile_width * (self.map.width / 2)
-        height = self.map.tile_height * (self.map.height / 2)
-        return left_bottom_x + width, left_bottom_y + height
+    def on_dice_fall(self):
+        self.player.next_step(self.first_dice.current_number() + self.second_dice.current_number())
+        house = self.houses.get(str(self.player.position_index))
+        if house is None:
+            self.throw_dice_popup.show()
+        elif house.owner is None:
+            self.buy_house_popup.show_house(house)
+        else:
+            # TODO: Make rent popup if owner not equals player
+            self.throw_dice_popup.show()
+
+    def throw_dice(self):
+        self.first_dice.select_random_dice()
+        self.second_dice.select_random_dice()
+
+    def buy_house(self, cancelled, house):
+        if cancelled:
+            self.throw_dice_popup.show()
+            return
+        self.player.buy_house(house)
+        self.throw_dice_popup.show()

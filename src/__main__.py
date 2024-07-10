@@ -1,9 +1,13 @@
 import arcade
+from arcade.gui import UIManager
 
 from src import constants
-from src.constants import DICE_CLASS
-from src.entity import board, dice
+from src.constants import DICE_CLASS, ASSETS_FOLDER
+from src.entity import dice
+from src.entity.board import Board
+from src.entity.board_map import BoardTileMap
 from src.entity.player import Player
+from src.gui.popup.board_popup import ThrowDicePopup, BuyHousePopup
 
 
 class PyThopoly(arcade.Window):
@@ -16,23 +20,40 @@ class PyThopoly(arcade.Window):
 
         arcade.set_background_color(constants.BACKGROUND_COLOR)
 
+        self.ui_manager = None
+
+        self.board_map = None
         self.board = None
         self.player = None
         self.first_dice = None
         self.second_dice = None
 
+        self.throw_dice_popup = None
+        self.buy_house_popup = None
+
     def setup(self):
-        self.board = board.Board("../assets/tilemaps/monopoly.json", self.width, self.height)
-        self.player = Player(board=self.board, radius=20)
-        self.first_dice = dice.Dice("../assets/images/dices/", "../assets/images/animated_dices/", self.board.find_position(DICE_CLASS, "1"))
-        self.second_dice = dice.Dice("../assets/images/dices/", "../assets/images/animated_dices/", self.board.find_position(DICE_CLASS, "2"))
+        self.ui_manager = UIManager()
+        self.ui_manager.enable()
+
+        self.board_map = BoardTileMap(ASSETS_FOLDER + "/tilemaps/monopoly.json", self.width, self.height)
+        self.player = Player(board_map=self.board_map, radius=20)
+        self.first_dice = dice.Dice(ASSETS_FOLDER + "/images/dices/", ASSETS_FOLDER + "/images/animated_dices/", self.board_map.find_position(DICE_CLASS, "1"))
+        self.second_dice = dice.Dice(ASSETS_FOLDER + "/images/dices/", ASSETS_FOLDER + "/images/animated_dices/", self.board_map.find_position(DICE_CLASS, "2"))
+
+        self.throw_dice_popup = ThrowDicePopup(self.ui_manager, self.board_map)
+        self.buy_house_popup = BuyHousePopup(self.ui_manager, self.board_map)
+
+        self.board = Board(self)
+        self.board.start_game()
 
     def on_draw(self):
         """
         Render the screen.
         """
         self.clear()
+        self.ui_manager.draw()
         self.board.draw()
+        self.board_map.draw()
         self.player.draw()
         self.first_dice.draw()
         self.second_dice.draw()
@@ -42,18 +63,7 @@ class PyThopoly(arcade.Window):
         self.second_dice.update(delta_time)
         self.player.update()
 
-    def on_key_press(self, key, key_modifiers):
-        if key == arcade.key.D:
-            self.player.next_step(1)
-        if key == arcade.key.R:
-            self.first_dice.select_random_dice()
-            self.second_dice.select_random_dice()
-            self.player.next_step(self.first_dice.current_number() + self.second_dice.current_number())
-
     def on_key_release(self, key, key_modifiers):
-        """
-        Called whenever the user lets off a previously pressed key.
-        """
         pass
 
 

@@ -6,25 +6,30 @@ from src.constants import PLAYER_PATH_CLASS, MOVE_TRANSITION_SPEED
 
 
 class Player(MoveTransition):
-    def __init__(self, board, radius, position_index=0, money=0):
+    def __init__(self, board_map, radius, position_index=0, money=0):
         super().__init__(MOVE_TRANSITION_SPEED, easing=ease_in_out_quad)
-        self.board = board
+        self.board_map = board_map
         self.radius = radius
         self.money = money
         self.position_index = position_index
+        self.color = arcade.color.GOLD
 
-        x, y = self.board.index_to_position(self.position_index)
+        r, g, b = self.color
+        self.outline_color = (r * 0.5, g * 0.5, b * 0.5)
+
+        x, y = self.board_map.index_to_position(self.position_index)
         self.current_x = x
         self.current_y = y
         self._set_start_position(x, y)
 
     def draw(self):
-        arcade.draw_circle_filled(self.current_x, self.current_y, self.radius, arcade.color.GOLD)
+        arcade.draw_circle_outline(self.current_x, self.current_y, self.radius + 4, self.outline_color, self.radius)
+        arcade.draw_circle_filled(self.current_x, self.current_y, self.radius, self.color)
 
     def update(self):
         self.update_animation()
 
-        x, y = self.board.index_to_position(self.position_index)
+        x, y = self.board_map.index_to_position(self.position_index)
 
         if self.current_x == x and self.current_y == y:
             return
@@ -34,10 +39,13 @@ class Player(MoveTransition):
 
         self.move(x, y)
 
+    def buy_house(self, house):
+        house.owner = self
+
     def next_step(self, amount):
         new_position = self.position_index + amount
-        if new_position not in self.board.positions[PLAYER_PATH_CLASS]:
-            self.position_index = new_position % len(self.board.positions[PLAYER_PATH_CLASS])
+        if new_position not in self.board_map.positions[PLAYER_PATH_CLASS]:
+            self.position_index = new_position % len(self.board_map.positions[PLAYER_PATH_CLASS])
             return
         self.position_index += amount
 
